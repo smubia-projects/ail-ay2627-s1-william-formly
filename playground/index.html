@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formly Playground</title>
+  <meta name="description" content="Try Formly, the AI form-filling assistant, on a sample sign-up form." />
+  <link rel="stylesheet" href="playground.css" />
+  <link rel="stylesheet" href="content.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="logo">✨ Formly</div>
+      <h1>Fill in any application form in seconds</h1>
+      <p class="lead">Formly is a Chrome extension that reads a form, answers every question from your profile and resume, writes the long answers too, and learns new facts when you submit. This playground runs the same code on a sample form.</p>
+      <ol class="steps">
+        <li><b>Add a profile.</b> <button type="button" class="btn small" id="loadSample">Use a sample profile</button> or <a href="profile.html">write your own</a> (stored in this browser only).</li>
+        <li><b>Press ✨ Fill with Formly</b> (bottom right). Blue boxes were filled; orange ones are left for you.</li>
+        <li><b>Type a new answer and press Submit.</b> Formly saves it to your profile for the next form.</li>
+      </ol>
+      <p id="profileStatus" class="status"></p>
+      <p class="note">On a real site, install the extension: <a href="https://github.com/smubia-projects/ail-ay2627-s1-william-formly#6-installation--setup" target="_blank" rel="noopener">download it from GitHub</a> and load the <code>client</code> folder in <code>chrome://extensions</code>.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="sampleForm" class="form" novalidate>
+      <h2>SMU BIA: Member Sign-up (sample)</h2>
+      <p class="form-intro">Sample form for this demo. Nothing is sent anywhere when you submit. SMU Business Intelligence &amp; Analytics runs AI Lodge, workshops and data hackathons for students.</p>
+
+      <label for="q-name">Full name</label>
+      <input id="q-name" name="name" type="text" />
+
+      <label for="q-email">Email</label>
+      <input id="q-email" name="email" type="email" />
+
+      <label for="q-degree">Degree</label>
+      <select id="q-degree" name="degree">
+        <option value="">Choose…</option>
+        <option>Business Management</option>
+        <option>Information Systems</option>
+        <option>Computer Science</option>
+        <option>Economics</option>
+        <option>Accountancy</option>
+        <option>Law</option>
+      </select>
+
+      <fieldset>
+        <legend>Year of study</legend>
+        <label class="opt"><input type="radio" name="year" value="Year 1" /> Year 1</label>
+        <label class="opt"><input type="radio" name="year" value="Year 2" /> Year 2</label>
+        <label class="opt"><input type="radio" name="year" value="Year 3" /> Year 3</label>
+        <label class="opt"><input type="radio" name="year" value="Year 4" /> Year 4</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Which events interest you?</legend>
+        <label class="opt"><input type="checkbox" name="events" value="Workshops" /> Workshops</label>
+        <label class="opt"><input type="checkbox" name="events" value="Hackathons" /> Hackathons</label>
+        <label class="opt"><input type="checkbox" name="events" value="Industry talks" /> Industry talks</label>
+        <label class="opt"><input type="checkbox" name="events" value="Socials" /> Socials</label>
+      </fieldset>
+
+      <label for="q-diet">Dietary restrictions</label>
+      <input id="q-diet" name="diet" type="text" />
+
+      <label for="q-tg">Telegram username</label>
+      <input id="q-tg" name="telegram" type="text" />
+
+      <label for="q-why">Why do you want to join SMU BIA?</label>
+      <textarea id="q-why" name="why" rows="6"></textarea>
+
+      <label class="opt consent"><input type="checkbox" name="consent" value="I agree" /> I agree to the PDPA terms and the club privacy policy</label>
+
+      <button type="submit" class="btn">Submit</button>
+      <p id="submitted" class="status" hidden>✅ Submitted (sample only, nothing was sent). If you typed something new, Formly saved it to <a href="profile.html">your profile</a>.</p>
+    </form>
+  </main>
+
+  <footer class="wrap foot">
+    Formly by William Koh, AI Lodge Hackathon 2026 ·
+    <a href="https://www.smubia.com/ailodge" target="_blank" rel="noopener">Join AI Lodge</a> ·
+    <a href="https://www.smubia.com/Projects" target="_blank" rel="noopener">Explore other projects</a> ·
+    <a href="https://github.com/smubia-projects/ail-ay2627-s1-william-formly" target="_blank" rel="noopener">View on GitHub</a>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="chrome-shim.js"></script>
+  <script src="background.js"></script>
+  <script>chrome.__seal();</script>
+  <script src="cta.js"></script>
+  <script src="content.js"></script>
+  <script src="playground.js"></script>
+</body>
+</html>
