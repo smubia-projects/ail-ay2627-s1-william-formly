@@ -150,22 +150,13 @@
       <div class="card">
         <div class="grid">
           <label class="wide">
-            <span>API key (stays on this computer)</span>
-            <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" />
-          </label>
-          <label>
-            <span>AI model</span>
-            <input id="model" type="text" list="models" />
+            <span>Formly server (leave empty to use the SMU BIA demo server)</span>
+            <input id="apiBase" type="url" placeholder="https://…run.app or http://localhost:8080" autocomplete="off" />
           </label>
         </div>
-        <datalist id="models">
-          <option value="claude-haiku-4-5-20251001"></option>
-          <option value="gpt-4o-mini"></option>
-          <option value="gpt-5-mini"></option>
-        </datalist>
+        <p class="meta">Formly asks the AI through the SMU BIA AI Lodge server, which has a small free limit per person. No API key needed.</p>
         <div class="bar" style="position:static;background:none">
           <button class="btn primary" id="saveSettings">Save settings</button>
-          <button class="btn ghost" id="testKey">Test key</button>
           <span class="msg" id="settingsMsg"></span>
         </div>
       </div>
@@ -196,6 +187,7 @@
   <!-- Tools that read PDF and Word files (they live in the lib folder) -->
   <script src="lib/pdf.min.js"></script>
   <script src="lib/mammoth.browser.min.js"></script>
+  <script src="cta.js"></script>
   <script src="profile.js"></script>
 </body>
 </html>

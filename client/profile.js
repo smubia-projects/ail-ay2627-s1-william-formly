@@ -3,7 +3,7 @@
 // The "My Formly" page.
 //   - My Profile tab: your details in neat boxes
 //   - Documents tab:  your resume and other writing
-//   - Settings tab:   your API key and AI model
+//   - Settings tab:   learning on/off and which Formly server to use
 //
 // When you press Save, Formly also writes your details as plain
 // text into "profile", which is what background.js sends to the AI.
@@ -174,6 +174,35 @@ async function saveProfile() {
 }
 
 $('profileForm').addEventListener('submit', (e) => e.preventDefault());
+
+// "✨ Fill from my documents": the AI reads your documents and fills EMPTY boxes only
+// (yellow, for you to check). Short facts not written in the documents are dropped.
+$('extract').addEventListener('click', async () => {
+  $('profileMsg').textContent = '⏳ Reading your documents…';
+  $('extract').disabled = true;
+  try {
+    await saveProfile(); // the background reads the saved documents
+    const res = await chrome.runtime.sendMessage({ type: 'FORMLY_EXTRACT_PROFILE' });
+    if (res?.limit) {
+      $('profileMsg').textContent = '';
+      return window.FormlyCTA?.show(res.limit);
+    }
+    if (!res?.ok) return ($('profileMsg').textContent = '⚠️ ' + (res?.error || 'Could not read your documents.'));
+    let n = 0;
+    for (const [key, value] of Object.entries(res.profile || {})) {
+      const box = $('profileForm').elements[key];
+      if (!box || box.value.trim()) continue;
+      box.value = value;
+      box.classList.add('suggested');
+      n++;
+    }
+    $('profileMsg').textContent = n
+      ? `✨ Filled ${n} empty box${n === 1 ? '' : 'es'} (yellow). Check them, then press Save profile.`
+      : 'Nothing new found in your documents.';
+  } finally {
+    $('extract').disabled = false;
+  }
+});
 
 $('saveProfile').addEventListener('click', async () => {
   await saveProfile();
@@ -468,25 +497,14 @@ $('autoLearn').addEventListener('change', (e) => {
 });
 
 $('saveSettings').addEventListener('click', async () => {
-  await chrome.storage.local.set({
-    apiKey: $('apiKey').value.trim(),
-    model: $('model').value.trim(),
-  });
+  await chrome.storage.local.set({ apiBase: $('apiBase').value.trim() });
   $('settingsMsg').textContent = '✅ Saved!';
-});
-
-$('testKey').addEventListener('click', async () => {
-  const apiKey = $('apiKey').value.trim();
-  if (!apiKey) return ($('settingsMsg').textContent = 'Paste your API key first.');
-  $('settingsMsg').textContent = 'Testing…';
-  const res = await chrome.runtime.sendMessage({ type: 'FORMLY_TEST_KEY', apiKey, model: $('model').value.trim() });
-  $('settingsMsg').textContent = res?.ok ? '✅ Your key works! Press Save settings.' : '⚠️ ' + (res?.error || 'Key test failed.');
 });
 
 // =============================================================
 // START: load what you saved before
 // =============================================================
-chrome.storage.local.get(['profileData', 'profile', 'apiKey', 'model', 'docs', 'autoLearn']).then((saved) => {
+chrome.storage.local.get(['profileData', 'profile', 'apiBase', 'docs', 'autoLearn']).then((saved) => {
   let data = saved.profileData;
 
   // First time here? Put your old profile text into "Anything else"
@@ -502,8 +520,7 @@ chrome.storage.local.get(['profileData', 'profile', 'apiKey', 'model', 'docs', '
   drawProfile(data);
   docs = saved.docs || [];
   drawDocs();
-  $('apiKey').value = saved.apiKey || '';
-  $('model').value = saved.model || 'claude-haiku-4-5-20251001';
+  $('apiBase').value = saved.apiBase || '';
   $('autoLearn').checked = saved.autoLearn !== false;
   showTab(location.hash.slice(1));
 });

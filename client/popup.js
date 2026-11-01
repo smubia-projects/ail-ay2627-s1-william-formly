@@ -1,6 +1,6 @@
 // Formly — popup.js
 // The little window when you click the Formly icon.
-// Your profile, API key and model now live on the "My Profile" page.
+// Your profile and documents live on the "My Profile" page.
 
 const $ = (id) => document.getElementById(id);
 const status = (msg) => ($('status').textContent = msg);
@@ -13,8 +13,8 @@ function openProfile(tab) {
 }
 
 // ===== SETUP CHECK =====
-// If your key or profile is missing, show a friendly reminder
-chrome.storage.local.get(['apiKey', 'profile', 'docs', 'enabled', 'lastLearned']).then(({ apiKey, profile, docs, enabled, lastLearned }) => {
+// If your profile is missing, show a friendly reminder
+chrome.storage.local.get(['profile', 'docs', 'enabled', 'lastLearned']).then(({ profile, docs, enabled, lastLearned }) => {
   $('enabled').checked = enabled !== false;
 
   // Things Formly just learned (shown once, then cleared)
@@ -27,12 +27,9 @@ chrome.storage.local.get(['apiKey', 'profile', 'docs', 'enabled', 'lastLearned']
   }
   chrome.action.setBadgeText({ text: '' }); // clear the "+1" on the icon
 
-  if (!apiKey) {
+  if ((!profile || !profile.trim()) && !(docs || []).length) {
     $('setup').hidden = false;
-    $('setupText').textContent = 'First, add your AI key in My Profile & Settings → Settings.';
-  } else if ((!profile || !profile.trim()) && !(docs || []).length) {
-    $('setup').hidden = false;
-    $('setupText').textContent = 'Next, fill in your details in My Profile & Settings.';
+    $('setupText').textContent = 'First, fill in your details in My Profile & Settings.';
   }
 });
 
