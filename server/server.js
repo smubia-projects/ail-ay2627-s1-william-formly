@@ -15,7 +15,7 @@ import {
 } from './prompts.js';
 
 const API_BASE_URL = (process.env.API_BASE_URL || 'https://api.apiyi.com/v1').replace(/\/+$/, '');
-const MODEL_NAME = process.env.MODEL_NAME || 'gemini-3.5-flash-lite';
+const MODEL_NAME = process.env.MODEL_NAME || 'deepseek-v4-flash';
 const apiKey = () => process.env.API_KEY || process.env.APIYI_API_KEY || '';
 
 const limiter = createRateLimiter({
