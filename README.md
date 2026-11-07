@@ -7,6 +7,19 @@
 
 ![Formly filling a club sign-up form](docs/images/form-filled.png)
 
+> **SMU BIA AI Lodge showcase version.** This fork is deployed by the club:
+> - **API** (`server/`, Cloud Run): a small stateless Express API that holds Formly's prompts and calls the AI
+>   through the club's gateway. Routes: `POST /api/answer` (fill a form), `POST /api/extract-profile`
+>   (read your documents), `POST /api/learn` (tidy answers you typed), `GET /api/health`.
+>   Each AI route has a small free limit per person; past it Formly shows a card with links to AI Lodge.
+> - **Playground** (`playground/`, Vercel): a sample sign-up form and the My Profile page, running the
+>   extension's own scripts in the page, so you can try Formly without installing anything.
+> - **Extension** (`client/`): download it from this repo and load it in Chrome to fill real forms. It now calls
+>   the club's API, so **no API key is needed**. Your profile and documents still stay in your browser.
+>
+> Not deployed: the student's GitHub Pages site in `docs/` (its install page, beta zip and phone sign-up form
+> belong to the original bring-your-own-key version).
+
 ---
 
 ## 1. Problem Statement
@@ -71,14 +84,14 @@ AI isn't just a chat box here. It's used in **three separate jobs**, each with i
 - **Fill from my documents:** the model extracts profile fields from your resume as JSON. **Code then rejects any short fact that isn't actually written in your documents** (for example, a guessed phone number is dropped).
 - **Learning:** answers you typed are sent to the model, which turns them into clean facts with a **label**, **value** and **section** (`"Telegram username" → "@alextan" → Contact`). It also decides whether an answer is reusable or a one-off (e.g. "Which time slot do you prefer?" is skipped). It reuses an existing box name when the meaning matches.
 
-**Model:** any OpenAI-compatible chat model. We used **`gpt-4o-mini`** (default) and tested **`claude-haiku-4-5-20251001`**, both through the apiyi gateway. You can pick the model in Settings.
+**Model:** any OpenAI-compatible chat model. We used **`gpt-4o-mini`** (default) and tested **`claude-haiku-4-5-20251001`**, both through the apiyi gateway. The showcase API reads the model from `MODEL_NAME` (default `deepseek-v4-flash`, plain text calls whose JSON the server parses itself).
 
 ## 5. External Tools & Datasets
 
 | Tool | Used for | Licence |
 |---|---|---|
 | [apiyi](https://api.apiyi.com) (OpenAI-compatible API gateway) | Calling the AI models | Paid API |
-| `gpt-4o-mini` (OpenAI) / `claude-haiku-4-5-20251001` (Anthropic) | Answering questions, extracting profile facts, learning | via API |
+| `gpt-4o-mini` (OpenAI) / `claude-haiku-4-5-20251001` (Anthropic); the showcase API uses `deepseek-v4-flash` | Answering questions, extracting profile facts, learning | via API |
 | [pdf.js](https://github.com/mozilla/pdf.js) 3.11.174 | Reading text from PDF uploads, in the browser | Apache-2.0 |
 | [mammoth.js](https://github.com/mwilliamson/mammoth.js) 1.8.0 | Reading text from Word (.docx) uploads, in the browser | BSD-2-Clause |
 | Chrome Extensions API (Manifest V3) | Content script, service worker, storage, popup, options page | n/a |
@@ -87,21 +100,29 @@ AI isn't just a chat box here. It's used in **three separate jobs**, each with i
 
 ## 6. Installation & Setup
 
-You need **Google Chrome** and an **API key** for an OpenAI-compatible service (we used apiyi).
+You need **Google Chrome**. No API key: the extension calls the SMU BIA Formly API.
 
-1. **Download the code.** On this GitHub page, click **Code → Download ZIP** and unzip it (or `git clone https://github.com/William189189/Formly-3.git`).
+1. **Download the code.** On this GitHub page, click **Code → Download ZIP** and unzip it (or `git clone https://github.com/smubia-projects/ail-ay2627-s1-william-formly.git`).
 2. Open Chrome and go to **`chrome://extensions`**.
 3. Turn on **Developer mode** (top right).
 4. Click **Load unpacked** and choose the **`client`** folder inside the project.
 5. Click the 🧩 puzzle icon in Chrome and **pin** Formly.
-6. Click the Formly icon → **👤 My Profile & Settings** → **⚙️ Settings**:
-   - paste your **API key**
-   - choose a **model** (e.g. `gpt-4o-mini`)
-   - click **Test key**, then **Save settings**
+6. Click the Formly icon → **👤 My Profile & Settings**.
 7. **👤 My Profile:** fill in your details. Or go to **📄 Documents**, upload your resume (PDF/Word), then press **✨ Fill from my documents**, check the yellow boxes, and **Save profile**.
 8. Open any Google Form (use **Preview**) and press **✨ Fill with Formly**.
 
-> **Using a different AI provider?** Change `BASE_URL` at the top of `client/background.js` and add that website to `host_permissions` in `client/manifest.json`.
+> **Running your own server?** Start the API (below), then put its URL in **⚙️ Settings → Formly server**. A URL other than
+> the club's or `http://localhost:8080` must also be added to `host_permissions` in `client/manifest.json`.
+
+**Run the API and the playground locally**
+```bash
+cd server && npm ci && cp .env.example .env   # fill API_KEY in .env
+npm run dev                                   # http://localhost:8080/api/health
+npm test                                      # API tests against a stub AI (no key needed)
+cd .. && VITE_API_BASE=http://localhost:8080 node playground/build.js
+npx serve playground/dist -l 5173             # open http://localhost:5173
+```
+The model, gateway and limits come from env vars: see `server/.env.example`.
 
 **Project structure**
 ```
@@ -109,11 +130,14 @@ client/
 ├── manifest.json     # extension settings and permissions
 ├── content.js        # runs on web pages: finds questions, fills answers, learns on Submit
 ├── content.css       # the ✨ button and blue/orange outlines
-├── background.js     # the "brain": prompts, document search, AI calls, learning
+├── background.js     # document search, calls to the Formly API, learning
+├── cta.js            # the card shown at the free demo limit
 ├── popup.html/.js    # the small window when you click the Formly icon
 ├── profile.html/.js  # My Formly page: Profile, Documents, Settings
 └── lib/              # pdf.js and mammoth.js (read PDF and Word files)
-docs/                 # project website (GitHub Pages) and screenshots
+server/               # Formly API (Cloud Run): prompts + AI calls + rate limits
+playground/           # web playground (Vercel): sample form + My Profile, same scripts
+docs/                 # original project website (GitHub Pages, not deployed) and screenshots
 ```
 
 ## 7. AI Safety & Limitations
@@ -145,7 +169,7 @@ docs/                 # project website (GitHub Pages) and screenshots
 - **Manual tests** on real Google Forms with `gpt-4o-mini` through apiyi.
 
 ### Known limitations
-- **Bring-your-own API key:** the key is stored in the browser. That's fine for a prototype, but a real product needs a small backend that holds the key and adds rate limits.
+- **Shared demo server:** the showcase version calls the club's API, which holds the key and limits each person to a few AI requests. The form questions, profile text and best document parts are sent to it for each request; nothing is stored on the server.
 - **Third-party gateway:** form questions and parts of the profile pass through the AI provider/gateway. Users should only add information they're comfortable sharing with it.
 - **Prompt-level rules:** consent boxes and prompt-injection defence during *filling* rely on the AI following instructions. They are not yet enforced in code.
 - Some unusual widgets (custom date pickers, file uploads, rich-text editors) are not filled.
