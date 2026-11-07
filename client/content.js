@@ -357,7 +357,9 @@
     }
     try {
       const res = await chrome.runtime.sendMessage({ type: 'FORMLY_LEARN', site: location.hostname, items });
-      if (res?.ok && res.saved?.length) {
+      if (res?.limit) {
+        window.FormlyCTA?.show(res.limit); // free demo limit reached (429) or paused (503)
+      } else if (res?.ok && res.saved?.length) {
         const list = res.saved.map((s) => `${s.label} (${s.section})`).join(', ');
         toast(`🧠 Saved to your profile: ${list}. Formly will fill it next time. You can edit or delete it in My Profile.`, 10000);
       } else if (!quiet) {
@@ -447,6 +449,10 @@
 
       // background.js builds the prompt, calls the AI, and splits the answers
       const res = await chrome.runtime.sendMessage({ type: 'FORMLY_ANSWER', page, fields });
+      if (res?.limit) {
+        window.FormlyCTA?.show(res.limit); // free demo limit reached (429) or paused (503)
+        return;
+      }
       if (!res?.ok) {
         toast('⚠️ ' + (res?.error || 'Something went wrong.'), 12000);
         return;
