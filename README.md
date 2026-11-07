@@ -12,13 +12,15 @@
 >   through the club's gateway. Routes: `POST /api/answer` (fill a form), `POST /api/extract-profile`
 >   (read your documents), `POST /api/learn` (tidy answers you typed), `GET /api/health`.
 >   Each AI route has a small free limit per person; past it Formly shows a card with links to AI Lodge.
-> - **Playground** (`playground/`, Vercel): a sample sign-up form and the My Profile page, running the
+> - **Website** (Vercel, https://ail-ay2627-s1-william-formly.vercel.app): William's own landing page from `docs/index.html`
+>   at the root, with two "Try the demo playground" buttons and the download links pointing at this fork's extension.
+> - **Playground** (`playground/`, Vercel, at `/playground/`): a sample sign-up form and the My Profile page, running the
 >   extension's own scripts in the page, so you can try Formly without installing anything.
 > - **Extension** (`client/`): download it from this repo and load it in Chrome to fill real forms. It now calls
 >   the club's API, so **no API key is needed**. Your profile and documents still stay in your browser.
 >
-> Not deployed: the student's GitHub Pages site in `docs/` (its install page, beta zip and phone sign-up form
-> belong to the original bring-your-own-key version).
+> Not deployed from `docs/`: `install.html` and `formly-beta.zip` (the original beta), `join.html` (its phone sign-up
+> form; the demo collects no personal data) and `privacy.html` (the beta's account system).
 
 ---
 
@@ -137,7 +139,7 @@ client/
 └── lib/              # pdf.js and mammoth.js (read PDF and Word files)
 server/               # Formly API (Cloud Run): prompts + AI calls + rate limits
 playground/           # web playground (Vercel): sample form + My Profile, same scripts
-docs/                 # original project website (GitHub Pages, not deployed) and screenshots
+docs/                 # William's website: index.html + images are the deployed landing page
 ```
 
 ## 7. AI Safety & Limitations
