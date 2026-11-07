@@ -11,8 +11,8 @@
     name: 'Formly',
     emoji: '✨',
     accentColor: '#1a73e8',
-    headline: "You've filled your share of forms!",
-    description: 'This demo used {count} free AI requests for this action. Formly was built by an SMU BIA AI Lodge member.',
+    headline: 'Your forms filled themselves!',
+    description: 'Want to build AI that takes the busywork out of applications, sign-ups and paperwork? A team and a clear goal take you from idea to an installable tool at AI Lodge.',
     programme: 'AI Lodge',
     programmeLink: 'https://www.smubia.com/ailodge',
     showcaseLink: 'https://www.smubia.com/Projects',
@@ -53,7 +53,7 @@
     const top = paused
       ? `<div class="emoji">⏸️</div><h2>This demo is paused</h2><p>${esc(limit.message || 'This demo is temporarily paused. Check back soon.')}</p>`
       : `<div class="emoji">${PROJECT.emoji}</div><h2>${esc(PROJECT.headline)}</h2>
-         <p>${esc(PROJECT.description.replace('{count}', limit?.queriesUsed ?? 'all its'))}</p>`;
+         <p>${esc(PROJECT.description)}</p>`;
     const links = paused
       ? ''
       : `<a class="btn primary" href="${PROJECT.programmeLink}" target="_blank" rel="noopener">Join ${PROJECT.programme}<span>→</span></a>
