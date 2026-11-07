@@ -7,3 +7,7 @@ server/config.env
 backup-*/
 .DS_Store
 node_modules/
+
+# Playground build output (Vercel)
+playground/dist/
+config.js

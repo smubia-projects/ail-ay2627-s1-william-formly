@@ -1,0 +1,6 @@
+{
+  "buildCommand": "node playground/build.js",
+  "outputDirectory": "playground/dist",
+  "installCommand": "echo no install needed",
+  "framework": null
+}

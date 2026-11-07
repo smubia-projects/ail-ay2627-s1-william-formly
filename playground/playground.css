@@ -1,0 +1,30 @@
+:root {
+  --bg: #f3f7ff; --card: #ffffff; --text: #1f2937; --muted: #5b6475; --line: #dbe3f4; --accent: #1a73e8;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+.hero { background: linear-gradient(160deg, #e7f0ff, #f3f7ff); border-bottom: 1px solid var(--line); padding: 32px 0 20px; }
+.logo { font-weight: 800; font-size: 24px; color: var(--accent); }
+h1 { font-size: clamp(26px, 5vw, 34px); line-height: 1.2; letter-spacing: -0.6px; margin: 10px 0 8px; }
+.lead { color: var(--muted); margin: 0 0 16px; }
+.steps { padding-left: 20px; margin: 0 0 10px; }
+.steps li { margin-bottom: 6px; }
+.status { font-weight: 600; margin: 8px 0; }
+.note { color: var(--muted); font-size: 14.5px; }
+code { background: #eef4ff; border-radius: 6px; padding: 1px 6px; font-size: 14px; }
+a { color: var(--accent); }
+.btn { display: inline-block; border: 0; border-radius: 10px; padding: 11px 20px; background: var(--accent); color: #fff; font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1; cursor: pointer; }
+.btn:hover { background: #1557b0; }
+.btn.small { padding: 6px 12px; font-size: 14px; }
+.form { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px 20px; margin: 24px 0; display: grid; gap: 6px; }
+.form h2 { margin: 0; font-size: 22px; }
+.form-intro { color: var(--muted); margin: 0 0 8px; font-size: 15px; }
+.form > label { font-weight: 600; margin-top: 10px; }
+input[type=text], input[type=email], select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #c9d4ea; border-radius: 10px; font: inherit; background: #fff; }
+fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 8px 14px 10px; margin: 12px 0 0; }
+legend { font-weight: 600; padding: 0 4px; }
+label.opt { display: block; font-weight: 400; margin: 4px 0; }
+.form > label.consent { font-weight: 400; margin: 14px 0 8px; }
+.form .btn { justify-self: start; margin-top: 8px; }
+.foot { color: var(--muted); font-size: 14px; padding-bottom: 96px; }
