@@ -15,7 +15,7 @@ import {
 } from './prompts.js';
 
 const API_BASE_URL = (process.env.API_BASE_URL || 'https://api.apiyi.com/v1').replace(/\/+$/, '');
-const MODEL_NAME = process.env.MODEL_NAME || 'deepseek-v4-flash';
+const MODEL_NAME = process.env.MODEL_NAME || 'deepseek-v4-1-flash-260910';
 const apiKey = () => process.env.API_KEY || process.env.APIYI_API_KEY || '';
 
 const limiter = createRateLimiter({
@@ -58,6 +58,8 @@ async function callAI({ system, prompt, maxTokens }) {
         model: MODEL_NAME,
         max_tokens: maxTokens,
         messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }],
+        // DeepSeek thinks first by default; switch it off to stay well inside the 60 s timeout.
+        ...(/deepseek/i.test(MODEL_NAME) ? { reasoning_effort: 'none' } : {}),
       }),
       signal: AbortSignal.timeout(60000),
     });

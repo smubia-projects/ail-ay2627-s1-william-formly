@@ -86,14 +86,14 @@ AI isn't just a chat box here. It's used in **three separate jobs**, each with i
 - **Fill from my documents:** the model extracts profile fields from your resume as JSON. **Code then rejects any short fact that isn't actually written in your documents** (for example, a guessed phone number is dropped).
 - **Learning:** answers you typed are sent to the model, which turns them into clean facts with a **label**, **value** and **section** (`"Telegram username" → "@alextan" → Contact`). It also decides whether an answer is reusable or a one-off (e.g. "Which time slot do you prefer?" is skipped). It reuses an existing box name when the meaning matches.
 
-**Model:** any OpenAI-compatible chat model. We used **`gpt-4o-mini`** (default) and tested **`claude-haiku-4-5-20251001`**, both through the apiyi gateway. The showcase API reads the model from `MODEL_NAME` (default `deepseek-v4-flash`, plain text calls whose JSON the server parses itself).
+**Model:** any OpenAI-compatible chat model. We used **`gpt-4o-mini`** (default) and tested **`claude-haiku-4-5-20251001`**, both through the apiyi gateway. The showcase API reads the model from `MODEL_NAME` (default `deepseek-v4-1-flash-260910`, plain text calls whose JSON the server parses itself).
 
 ## 5. External Tools & Datasets
 
 | Tool | Used for | Licence |
 |---|---|---|
 | [apiyi](https://api.apiyi.com) (OpenAI-compatible API gateway) | Calling the AI models | Paid API |
-| `gpt-4o-mini` (OpenAI) / `claude-haiku-4-5-20251001` (Anthropic); the showcase API uses `deepseek-v4-flash` | Answering questions, extracting profile facts, learning | via API |
+| `gpt-4o-mini` (OpenAI) / `claude-haiku-4-5-20251001` (Anthropic); the showcase API uses `deepseek-v4-1-flash-260910` | Answering questions, extracting profile facts, learning | via API |
 | [pdf.js](https://github.com/mozilla/pdf.js) 3.11.174 | Reading text from PDF uploads, in the browser | Apache-2.0 |
 | [mammoth.js](https://github.com/mwilliamson/mammoth.js) 1.8.0 | Reading text from Word (.docx) uploads, in the browser | BSD-2-Clause |
 | Chrome Extensions API (Manifest V3) | Content script, service worker, storage, popup, options page | n/a |
