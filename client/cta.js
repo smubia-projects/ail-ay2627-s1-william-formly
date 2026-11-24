@@ -15,7 +15,7 @@
     description: 'Want to build AI that takes the busywork out of applications, sign-ups and paperwork? A team and a clear goal take you from idea to an installable tool at AI Lodge.',
     programme: 'AI Lodge',
     programmeLink: 'https://www.smubia.com/ailodge',
-    showcaseLink: 'https://www.smubia.com/Projects',
+    showcaseLink: 'https://www.smubia.com/projects',
     githubLink: 'https://github.com/smubia-projects/ail-ay2627-s1-william-formly',
   };
 
